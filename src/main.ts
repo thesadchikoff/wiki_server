@@ -13,6 +13,19 @@ async function bootstrap() {
     ],
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
   });
+  app.use((req, res, next) => {
+    res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+    if (req.method === 'OPTIONS') {
+      res.header('Access-Control-Allow-Origin', 'https://wiki.credos.ru');
+      res.header(
+        'Access-Control-Allow-Methods',
+        'GET, POST, PUT, PATCH, DELETE, OPTIONS',
+      );
+      res.sendStatus(200);
+    } else {
+      next();
+    }
+  });
   app.use('/uploads', express.static(join(__dirname, '..', 'uploads')));
   await app.listen(PORT, () => {
     console.log(`Server started on port ${PORT}`);
