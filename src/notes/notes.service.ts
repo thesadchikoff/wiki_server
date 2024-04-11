@@ -112,9 +112,7 @@ export class NotesService {
       },
     });
     if (
-      !note.categories.moderators.filter(
-        (moderator) => moderator.id !== user.id,
-      )
+      !note.categories.moderators.find((moderator) => moderator.id !== user.id)
     )
       throw new HttpException(
         'Вы не являетесь модератором',
@@ -159,6 +157,14 @@ export class NotesService {
   }
 
   async update(updateNoteDto: UpdateNoteDto, noteId: string, userId: string) {
+    const user = await this.prismaService.user.findFirst({
+      where: {
+        id: userId,
+      },
+      include: {
+        moderatedContent: true,
+      },
+    });
     const note = await this.prismaService.notes.findFirst({
       where: {
         id: noteId,
@@ -172,19 +178,24 @@ export class NotesService {
       },
     });
 
-    if (note.author.id !== userId)
-      throw new HttpException(
-        'Вы не являетесь автором публикации',
-        HttpStatus.BAD_REQUEST,
-      );
-    return this.prismaService.notes.update({
-      where: {
-        id: noteId,
-      },
-      data: {
-        ...updateNoteDto,
-      },
-    });
+    if (
+      user.isAdmin ||
+      note.author.id !== userId ||
+      user.moderatedContent.length > 0
+    )
+      return this.prismaService.notes.update({
+        where: {
+          id: noteId,
+        },
+        data: {
+          isAccepted: false,
+          ...updateNoteDto,
+        },
+      });
+    throw new HttpException(
+      'Вы не являетесь автором публикации, модератором или администратором',
+      HttpStatus.BAD_REQUEST,
+    );
   }
 
   async remove(id: string, userId: string) {
@@ -208,18 +219,22 @@ export class NotesService {
         },
       },
     });
+    console.log(user);
+
     if (
-      postForUserValidate.author.id !== userId ||
-      !user.moderatedContent.length
+      user.isAdmin ||
+      postForUserValidate.author.id === userId ||
+      user.moderatedContent.length > 0
     )
-      throw new HttpException(
-        'Вы не являетесь автором публикации или модератором',
-        HttpStatus.BAD_REQUEST,
-      );
-    return this.prismaService.notes.delete({
-      where: {
-        id: postForUserValidate.id,
-      },
-    });
+      return this.prismaService.notes.delete({
+        where: {
+          id: postForUserValidate.id,
+        },
+      });
+
+    throw new HttpException(
+      'Вы не являетесь автором публикации, модератором или администратором',
+      HttpStatus.BAD_REQUEST,
+    );
   }
 }
