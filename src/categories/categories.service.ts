@@ -52,7 +52,13 @@ export class CategoriesService {
     return this.prismaService.categories.findMany({
       include: {
         _count: {
-          select: { notes: true },
+          select: {
+            notes: {
+              where: {
+                isAccepted: true,
+              },
+            },
+          },
         },
       },
     });
@@ -61,7 +67,16 @@ export class CategoriesService {
   async getCategoryForModeration(userId: string) {
     const user = await this.prismaService.user.findFirst({
       include: {
-        moderatedContent: true,
+        moderatedContent: {
+          include: {
+            _count: true,
+            notes: {
+              where: {
+                isAccepted: false,
+              },
+            },
+          },
+        },
         categories: true,
       },
       where: {

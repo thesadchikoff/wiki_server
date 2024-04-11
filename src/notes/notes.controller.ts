@@ -12,7 +12,7 @@ import {
 import { User } from '@prisma/client';
 import { JwtAuthGuard } from 'src/guards/jwt-auth.guard';
 import { CreateNoteDto, SearchDto } from './dto/create-note.dto';
-import { UpdateNoteDto } from './dto/update-note.dto';
+import { NoteModeratorAction, UpdateNoteDto } from './dto/update-note.dto';
 import { NotesService } from './notes.service';
 
 type RequestWithUser = Request & { user: User };
@@ -53,10 +53,19 @@ export class NotesController {
   }
 
   @UseGuards(JwtAuthGuard)
-  @Get('/moderation')
-  getNotesForModeration(@Req() req: RequestWithUser) {
+  @Get('/moderation/:id')
+  getNotesForModeration(@Req() req: RequestWithUser, @Param('id') id: string) {
     console.log('Start note controller');
-    return this.notesService.getNotesForModeration(req.user['sub']);
+    return this.notesService.getNotesForModeration(req.user['sub'], id);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Post('/accept-or-decline')
+  async checkNotesByModers(
+    @Req() req: RequestWithUser,
+    @Body() param: NoteModeratorAction,
+  ) {
+    return this.notesService.acceptNoteByModerator(req.user['sub'], param);
   }
 
   @UseGuards(JwtAuthGuard)

@@ -1,7 +1,7 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateNoteDto, SearchDto } from './dto/create-note.dto';
-import { UpdateNoteDto } from './dto/update-note.dto';
+import { NoteModeratorAction, UpdateNoteDto } from './dto/update-note.dto';
 
 @Injectable()
 export class NotesService {
@@ -35,6 +35,7 @@ export class NotesService {
   searchNote(dto: SearchDto, categoryId: string) {
     return this.prismaService.notes.findMany({
       where: {
+        isAccepted: true,
         categoriesId: categoryId,
         title: {
           mode: 'insensitive',
@@ -51,8 +52,8 @@ export class NotesService {
       },
     });
   }
-  async getNotesForModeration(userId: string) {
-    console.log('Start note handler');
+
+  async getNotesForModeration(userId: string, categoryId: string) {
     const user = await this.prismaService.user.findFirst({
       include: {
         moderatedContent: true,
@@ -67,15 +68,84 @@ export class NotesService {
         'Вы не модерируете данную категорию',
         HttpStatus.FORBIDDEN,
       );
-    const categoryForModeration = user.categories.map(async (category) => {
-      const note = await this.prismaService.notes.findMany({
-        where: {
-          categoriesId: category.id,
-        },
-      });
-      return note;
+    const category = await this.prismaService.categories.findFirst({
+      where: {
+        id: categoryId,
+      },
     });
-    return [...categoryForModeration];
+    const notes = await this.prismaService.notes.findMany({
+      where: {
+        categoriesId: categoryId,
+        isAccepted: false,
+      },
+      include: {
+        author: {
+          select: {
+            id: true,
+            email: true,
+          },
+        },
+      },
+    });
+    return {
+      category,
+      notes,
+    };
+  }
+
+  async acceptNoteByModerator(userId: string, param: NoteModeratorAction) {
+    const user = await this.prismaService.user.findFirst({
+      where: {
+        id: userId,
+      },
+    });
+    const note = await this.prismaService.notes.findFirst({
+      where: {
+        id: param.noteId,
+      },
+      include: {
+        categories: {
+          include: {
+            moderators: true,
+          },
+        },
+      },
+    });
+    if (
+      !note.categories.moderators.filter(
+        (moderator) => moderator.id !== user.id,
+      )
+    )
+      throw new HttpException(
+        'Вы не являетесь модератором',
+        HttpStatus.FORBIDDEN,
+      );
+
+    switch (param.type) {
+      case 'ACCEPT':
+        await this.prismaService.moderActionLog.create({
+          data: {
+            type: 'ACCEPT',
+            moderatorId: userId,
+          },
+        });
+        return this.prismaService.notes.update({
+          where: {
+            id: note.id,
+          },
+          data: {
+            isAccepted: true,
+          },
+        });
+      case 'UNACCEPT':
+        await this.prismaService.moderActionLog.create({
+          data: {
+            type: 'UNACCEPT',
+            moderatorId: userId,
+          },
+        });
+        this.remove(note.id, user.id);
+    }
   }
   findOne(id: string) {
     return this.prismaService.notes.findFirst({
@@ -118,6 +188,14 @@ export class NotesService {
   }
 
   async remove(id: string, userId: string) {
+    const user = await this.prismaService.user.findFirst({
+      where: {
+        id: userId,
+      },
+      include: {
+        moderatedContent: true,
+      },
+    });
     const postForUserValidate = await this.prismaService.notes.findFirst({
       where: {
         id,
@@ -130,9 +208,12 @@ export class NotesService {
         },
       },
     });
-    if (postForUserValidate.author.id !== userId)
+    if (
+      postForUserValidate.author.id !== userId ||
+      !user.moderatedContent.length
+    )
       throw new HttpException(
-        'Вы не являетесь автором публикации',
+        'Вы не являетесь автором публикации или модератором',
         HttpStatus.BAD_REQUEST,
       );
     return this.prismaService.notes.delete({
