@@ -10,6 +10,7 @@ async function bootstrap() {
       'http://localhost:5173',
       'https://wiki.credos.ru:8080',
       'https://wiki.credos.ru',
+      'http://192.168.88.165:5173',
     ],
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
   });

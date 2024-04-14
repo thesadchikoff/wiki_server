@@ -1,12 +1,18 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { EmailService } from 'src/email/email.service';
 import { PrismaService } from 'src/prisma/prisma.service';
+import responseMessage from 'src/utils/response-message.helper';
 import { CreateNoteDto, SearchDto } from './dto/create-note.dto';
 import { NoteModeratorAction, UpdateNoteDto } from './dto/update-note.dto';
 
 @Injectable()
 export class NotesService {
-  constructor(private prismaService: PrismaService) {}
-  create(createNoteDto: CreateNoteDto, userId: string) {
+  constructor(
+    private prismaService: PrismaService,
+    private emailService: EmailService,
+  ) {}
+  async create(createNoteDto: CreateNoteDto, userId: string) {
+    await this.emailService.sendUserConfirmation(createNoteDto.categoriesId);
     return this.prismaService.notes.create({
       data: {
         ...createNoteDto,
@@ -76,7 +82,7 @@ export class NotesService {
     const notes = await this.prismaService.notes.findMany({
       where: {
         categoriesId: categoryId,
-        isAccepted: false,
+        OR: [{ isAccepted: false }, { isEdited: true }],
       },
       include: {
         author: {
@@ -104,6 +110,7 @@ export class NotesService {
         id: param.noteId,
       },
       include: {
+        author: true,
         categories: {
           include: {
             moderators: true,
@@ -112,38 +119,103 @@ export class NotesService {
       },
     });
     if (
-      !note.categories.moderators.find((moderator) => moderator.id !== user.id)
-    )
-      throw new HttpException(
-        'Вы не являетесь модератором',
-        HttpStatus.FORBIDDEN,
-      );
-
-    switch (param.type) {
-      case 'ACCEPT':
-        await this.prismaService.moderActionLog.create({
-          data: {
-            type: 'ACCEPT',
-            moderatorId: userId,
-          },
-        });
-        return this.prismaService.notes.update({
-          where: {
-            id: note.id,
-          },
-          data: {
-            isAccepted: true,
-          },
-        });
-      case 'UNACCEPT':
-        await this.prismaService.moderActionLog.create({
-          data: {
-            type: 'UNACCEPT',
-            moderatorId: userId,
-          },
-        });
-        this.remove(note.id, user.id);
+      note.categories.moderators.find((moderator) => moderator.id === user.id)
+    ) {
+      switch (param.type) {
+        case 'ACCEPT':
+          await this.prismaService.moderActionLog.create({
+            data: {
+              type: 'ACCEPT',
+              moderatorId: userId,
+            },
+          });
+          if (note.isEdited) {
+            await this.prismaService.notes.update({
+              where: {
+                id: note.id,
+              },
+              data: {
+                isEdited: false,
+                oldContent: null,
+              },
+            });
+            await this.emailService.sendEmailForAcceptPublishUser(
+              note.author.email,
+              note.categoriesId,
+              note.id,
+            );
+            return responseMessage(
+              true,
+              'Одобрено',
+              'Публикация успешно отредактирована',
+            );
+          }
+          await this.emailService.sendEmailForAcceptPublishUser(
+            note.author.email,
+            note.categoriesId,
+            note.id,
+          );
+          await this.prismaService.notes.update({
+            where: {
+              id: note.id,
+            },
+            data: {
+              isAccepted: true,
+            },
+          });
+          return responseMessage(
+            true,
+            'Одобрено',
+            'Статья опубликована в общую ленту',
+          );
+        case 'UNACCEPT':
+          await this.prismaService.moderActionLog.create({
+            data: {
+              type: 'UNACCEPT',
+              moderatorId: userId,
+            },
+          });
+          await this.emailService.sendEmailForAcceptPublishUser(
+            note.author.email,
+            note.categoriesId,
+            note.id,
+            false,
+          );
+          if (note.isEdited) {
+            await this.emailService.sendEmailForAcceptPublishUser(
+              note.author.email,
+              note.categoriesId,
+              note.id,
+              false,
+            );
+            await this.prismaService.notes.update({
+              where: {
+                id: note.id,
+              },
+              data: {
+                isEdited: false,
+                oldContent: null,
+                content: note.oldContent,
+              },
+            });
+            return responseMessage(
+              true,
+              'Отклонено',
+              'Редактирование публикации отклонено',
+            );
+          }
+          await this.remove(note.id, user.id);
+          return responseMessage(
+            true,
+            'Отклонено',
+            'Публикация статьи отклонена',
+          );
+      }
     }
+    throw new HttpException(
+      'Вы не являетесь модератором',
+      HttpStatus.FORBIDDEN,
+    );
   }
   findOne(id: string) {
     return this.prismaService.notes.findFirst({
@@ -151,7 +223,14 @@ export class NotesService {
         id,
       },
       include: {
-        author: true,
+        author: {
+          select: {
+            id: true,
+            email: true,
+            isAdmin: true,
+            createdAt: true,
+          },
+        },
       },
     });
   }
@@ -182,16 +261,26 @@ export class NotesService {
       user.isAdmin ||
       note.author.id !== userId ||
       user.moderatedContent.length > 0
-    )
-      return this.prismaService.notes.update({
+    ) {
+      await this.prismaService.notes.update({
         where: {
           id: noteId,
         },
         data: {
-          isAccepted: false,
+          isEdited: true,
+          oldContent: note.content,
           ...updateNoteDto,
         },
       });
+      await this.emailService.sendUserConfirmation(note.categoriesId);
+      return {
+        success: true,
+        message: {
+          title: 'Отредактировано',
+          description: 'Обновленная статья появится в ленте после модерации',
+        },
+      };
+    }
     throw new HttpException(
       'Вы не являетесь автором публикации, модератором или администратором',
       HttpStatus.BAD_REQUEST,

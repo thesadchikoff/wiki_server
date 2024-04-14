@@ -32,6 +32,7 @@ model User {
   isAdmin          Boolean          @default(false) @map("is_admin")
   moderatedContent Categories[]     @relation(name: "moderated_content")
   ModerActionLog   ModerActionLog[]
+  createdAt        DateTime         @default(now()) @map("created_at")
 
   @@map("users")
 }
@@ -47,6 +48,8 @@ model Notes {
   categories   Categories? @relation(fields: [categoriesId], references: [id])
   categoriesId String?     @map("categories_id")
   isAccepted   Boolean     @default(false) @map("is_accept")
+  isEdited     Boolean     @default(false) @map("is_edited")
+  oldContent   String?     @map("old_content")
 
   @@map("notes")
 }

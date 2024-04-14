@@ -72,7 +72,7 @@ export class CategoriesService {
             _count: true,
             notes: {
               where: {
-                isAccepted: false,
+                OR: [{ isAccepted: false }, { isEdited: true }],
               },
             },
           },

@@ -63,7 +63,19 @@ export class UsersService {
         OR: [{ id: idOrEmail }, { email: idOrEmail }],
       },
       include: {
-        moderatedContent: true,
+        moderatedContent: {
+          include: {
+            _count: {
+              select: {
+                notes: {
+                  where: {
+                    OR: [{ isAccepted: false }, { isEdited: true }],
+                  },
+                },
+              },
+            },
+          },
+        },
       },
     });
   }
