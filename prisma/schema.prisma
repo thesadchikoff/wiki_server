@@ -50,6 +50,7 @@ model Notes {
   isAccepted   Boolean     @default(false) @map("is_accept")
   isEdited     Boolean     @default(false) @map("is_edited")
   oldContent   String?     @map("old_content")
+  isActual     Boolean     @default(true)
 
   @@map("notes")
 }
@@ -73,7 +74,7 @@ model Categories {
 model ModerActionLog {
   id          String          @id @default(uuid())
   type        ModerActionType
-  moderator   User            @relation(fields: [moderatorId], references: [id])
+  moderator   User            @relation(fields: [moderatorId], references: [id], onDelete: NoAction)
   moderatorId String          @map("moderator_id")
   createdAt   DateTime        @default(now()) @map("created_at")
 }

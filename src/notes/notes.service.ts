@@ -38,8 +38,22 @@ export class NotesService {
     });
   }
 
-  searchNote(dto: SearchDto, categoryId: string) {
-    return this.prismaService.notes.findMany({
+  async searchNote(dto: SearchDto, categoryId: string, page: string) {
+    const currentPage = parseInt(page) || 1; // Получаем текущую страницу из query параметра, по умолчанию 1
+    const itemsPerPage = 9; // Количество записей на странице
+    const totalPageCount = await this.prismaService.notes.count({
+      where: {
+        isAccepted: true,
+        categoriesId: categoryId,
+        title: {
+          mode: 'insensitive',
+          contains: dto.searchValue,
+        },
+      },
+    });
+    const notes = await this.prismaService.notes.findMany({
+      skip: (currentPage - 1) * itemsPerPage,
+      take: itemsPerPage,
       where: {
         isAccepted: true,
         categoriesId: categoryId,
@@ -57,6 +71,10 @@ export class NotesService {
         },
       },
     });
+    return {
+      notes: notes,
+      pages: Math.ceil(totalPageCount / itemsPerPage),
+    };
   }
 
   async getNotesForModeration(userId: string, categoryId: string) {
@@ -235,6 +253,58 @@ export class NotesService {
     });
   }
 
+  async actualNote(noteId: string, userId: string) {
+    const user = await this.prismaService.user.findFirst({
+      where: {
+        id: userId,
+      },
+      include: {
+        moderatedContent: true,
+      },
+    });
+    const note = await this.prismaService.notes.findFirst({
+      where: {
+        id: noteId,
+      },
+      include: {
+        author: {
+          select: {
+            id: true,
+          },
+        },
+      },
+    });
+
+    if (
+      user.isAdmin ||
+      note.author.id === userId ||
+      user.moderatedContent.length > 0
+    ) {
+      await this.prismaService.notes.update({
+        where: {
+          id: noteId,
+        },
+        data: {
+          isActual: !note.isActual,
+        },
+      });
+
+      return {
+        success: true,
+        message: {
+          title: 'Успешно',
+          description: `Статус статьи изменен на ${
+            note.isActual ? '"Неактуально"' : '"Актуально"'
+          }`,
+        },
+      };
+    }
+    throw new HttpException(
+      'Вы не являетесь автором публикации, модератором или администратором',
+      HttpStatus.BAD_REQUEST,
+    );
+  }
+
   async update(updateNoteDto: UpdateNoteDto, noteId: string, userId: string) {
     const user = await this.prismaService.user.findFirst({
       where: {
@@ -259,7 +329,7 @@ export class NotesService {
 
     if (
       user.isAdmin ||
-      note.author.id !== userId ||
+      note.author.id === userId ||
       user.moderatedContent.length > 0
     ) {
       await this.prismaService.notes.update({

@@ -37,9 +37,19 @@ export class NotesController {
     return this.notesService.findOne(id);
   }
 
-  @Post('/search/:id')
-  searchNote(@Body() dto: SearchDto, @Param('id') categoryId: string) {
-    return this.notesService.searchNote(dto, categoryId);
+  @Post('/search/:id/:page')
+  searchNote(
+    @Body() dto: SearchDto,
+    @Param('id') categoryId: string,
+    @Param('page') page: string,
+  ) {
+    return this.notesService.searchNote(dto, categoryId, page);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Patch('/toggle-actual-note/:id')
+  toggleActualNote(@Param('id') id: string, @Req() req: RequestWithUser) {
+    return this.notesService.actualNote(id, req.user['sub']);
   }
 
   @UseGuards(JwtAuthGuard)
