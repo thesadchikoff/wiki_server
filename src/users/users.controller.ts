@@ -15,6 +15,17 @@ export class UsersController {
   create(@Body() createUserDto: CreateUserDto) {
     return this.usersService.create(createUserDto);
   }
+
+  @Post('/verify')
+  register(@Body() dto: CreateUserDto) {
+    return this.usersService.createTempUser(dto);
+  }
+
+  @Get('verify-check/:code')
+  checkVerify(@Param('code') code: string) {
+    return this.usersService.validCode(code);
+  }
+
   @UseGuards(JwtAuthGuard)
   @Get()
   findAll() {

@@ -27,6 +27,17 @@ export class EmailService {
     });
   }
 
+  async sendMailForVerify(email: string, link: string) {
+    await this.mailerService.sendMail({
+      to: email,
+      subject: 'Регистрация в WIKI',
+      template: './verification',
+      context: {
+        link,
+      },
+    });
+  }
+
   async sendEmailForAcceptPublishUser(
     email: string,
     categoryId: string,

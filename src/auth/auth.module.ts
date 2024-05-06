@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
+import { EmailService } from 'src/email/email.service';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { AccessTokenStrategy } from 'src/strategy/auth.strategy';
 import { RefreshTokenStrategy } from 'src/strategy/refresh.strategy';
@@ -18,7 +19,9 @@ import { AuthService } from './auth.service';
     RefreshTokenStrategy,
     PrismaService,
     ConfigService,
+    EmailService,
   ],
   controllers: [AuthController],
+  exports: [AuthService, AuthModule],
 })
 export class AuthModule {}

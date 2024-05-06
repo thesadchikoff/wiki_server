@@ -37,6 +37,16 @@ model User {
   @@map("users")
 }
 
+model PreRegisterUser {
+  id         String @id @default(uuid())
+  email      String @unique
+  password   String
+  verifyCode String @unique @map("verify_code")
+  writeCount Int    @default(0) @map("write_count")
+
+  @@map("pre_register_user")
+}
+
 model Notes {
   id           String      @id @default(uuid())
   title        String
