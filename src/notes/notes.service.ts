@@ -38,6 +38,50 @@ export class NotesService {
     });
   }
 
+  async pinnedToggle(userId: string, noteId: string) {
+    const user = await this.prismaService.user.findFirst({
+      where: {
+        id: userId,
+      },
+      include: {
+        moderatedContent: {
+          select: {
+            id: true,
+          },
+        },
+      },
+    });
+    const note = await this.prismaService.notes.findFirst({
+      where: {
+        id: noteId,
+      },
+    });
+    if (
+      user.isAdmin ||
+      user.moderatedContent.find((data) => data.id === note.categoriesId)
+    ) {
+      await this.prismaService.notes.update({
+        where: {
+          id: note.id,
+        },
+        data: {
+          isPinned: !note.isPinned,
+        },
+      });
+      return {
+        success: true,
+        message: {
+          title: 'Успешно',
+          description: `Запись ${note.isPinned ? 'откреплена' : 'закреплена'}`,
+        },
+      };
+    }
+    throw new HttpException(
+      'Вы не модератор категории или не администратор',
+      HttpStatus.FORBIDDEN,
+    );
+  }
+
   async searchNote(dto: SearchDto, categoryId: string, page: string) {
     const currentPage = parseInt(page) || 1; // Получаем текущую страницу из query параметра, по умолчанию 1
     const itemsPerPage = 9; // Количество записей на странице
@@ -62,6 +106,16 @@ export class NotesService {
           contains: dto.searchValue,
         },
       },
+      orderBy: [
+        {
+          isPinned: 'desc',
+        },
+        {
+          User: {
+            _count: 'desc',
+          },
+        },
+      ],
       include: {
         author: {
           select: {
@@ -241,16 +295,109 @@ export class NotesService {
         id,
       },
       include: {
+        _count: {
+          select: { User: true },
+        },
+        User: {
+          select: {
+            id: true,
+          },
+        },
         author: {
           select: {
             id: true,
             email: true,
             isAdmin: true,
             createdAt: true,
+            _count: {
+              select: {
+                moderatedContent: true,
+              },
+            },
           },
         },
       },
     });
+  }
+
+  async usefulNote(userId: string, notesId: string) {
+    const note = await this.prismaService.notes.findFirst({
+      where: {
+        id: notesId,
+      },
+      include: {
+        User: {
+          select: {
+            id: true,
+          },
+        },
+      },
+    });
+    console.log(note);
+    if (!note)
+      throw new HttpException(
+        'Такой записи не существует',
+        HttpStatus.NOT_FOUND,
+      );
+    await this.prismaService.notes.update({
+      where: {
+        id: note.id,
+      },
+      data: {
+        User: {
+          connect: {
+            id: userId,
+          },
+        },
+      },
+    });
+    return {
+      success: true,
+      message: {
+        title: 'Успешно',
+        description: 'Статья отмечена как полезная',
+      },
+    };
+  }
+
+  async disUsefulNote(userId: string, notesId: string) {
+    const note = await this.prismaService.notes.findFirst({
+      where: {
+        id: notesId,
+      },
+      include: {
+        User: {
+          select: {
+            id: true,
+          },
+        },
+      },
+    });
+    console.log(note);
+    if (!note)
+      throw new HttpException(
+        'Такой записи не существует',
+        HttpStatus.NOT_FOUND,
+      );
+    await this.prismaService.notes.update({
+      where: {
+        id: note.id,
+      },
+      data: {
+        User: {
+          disconnect: {
+            id: userId,
+          },
+        },
+      },
+    });
+    return {
+      success: true,
+      message: {
+        title: 'Успешно',
+        description: 'Отметка убрана',
+      },
+    };
   }
 
   async actualNote(noteId: string, userId: string) {

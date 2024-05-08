@@ -8,6 +8,7 @@ import { JwtService } from '@nestjs/jwt';
 import * as argon2 from 'argon2';
 import { CreateUserDto } from 'src/users/dto/create-user.dto';
 import { UsersService } from 'src/users/users.service';
+import { ChangePasswordDto } from './dto/change-password.dto';
 
 @Injectable()
 export class AuthService {
@@ -60,6 +61,33 @@ export class AuthService {
     return {
       accessToken: tokens.accessToken,
       user: result,
+    };
+  }
+
+  async changePassword(dto: ChangePasswordDto, userId: string) {
+    const user = await this.usersService.findByEmailOrId(userId);
+    if (!user)
+      throw new HttpException(
+        'Произошла ошибка при смене пароля',
+        HttpStatus.BAD_REQUEST,
+      );
+    const passwordMatches = await this.decodeData(
+      user.password,
+      dto.oldPassword,
+    );
+    if (!passwordMatches)
+      throw new HttpException(
+        'Неверно указан старый пароль',
+        HttpStatus.BAD_REQUEST,
+      );
+    const hash = await this.hashData(dto.newPassword);
+    await this.usersService.changePassword(userId, hash);
+    return {
+      success: true,
+      message: {
+        title: 'Успех',
+        description: 'Пароль успешно изменен',
+      },
     };
   }
 

@@ -32,7 +32,9 @@ model User {
   isAdmin          Boolean          @default(false) @map("is_admin")
   moderatedContent Categories[]     @relation(name: "moderated_content")
   ModerActionLog   ModerActionLog[]
-  createdAt        DateTime         @default(now()) @map("created_at")
+  usefulNotes      Notes[]          @relation(name: "usefull_content")
+
+  createdAt DateTime @default(now()) @map("created_at")
 
   @@map("users")
 }
@@ -61,6 +63,8 @@ model Notes {
   isEdited     Boolean     @default(false) @map("is_edited")
   oldContent   String?     @map("old_content")
   isActual     Boolean     @default(true)
+  isPinned     Boolean     @default(false)
+  User         User[]      @relation(name: "usefull_content")
 
   @@map("notes")
 }

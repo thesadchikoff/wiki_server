@@ -81,6 +81,9 @@ export class UsersService {
   }
 
   async createTempUser(data: CreateUserDto) {
+    const validUser = await this.findByEmailOrId(data.email);
+    if (validUser)
+      throw new HttpException('Запрос отклонен', HttpStatus.BAD_REQUEST);
     const code = this.generateCodeAndHash();
     console.log(this.decodeBase64(code));
     const hash = await this.hashData(data.password);
@@ -105,6 +108,17 @@ export class UsersService {
 
   findAll() {
     return this.prisma.user.findMany();
+  }
+
+  async changePassword(userId: string, newPassword: string) {
+    return this.prisma.user.update({
+      where: {
+        id: userId,
+      },
+      data: {
+        password: newPassword,
+      },
+    });
   }
 
   async updateRefreshToken(dto: UpdateToken) {

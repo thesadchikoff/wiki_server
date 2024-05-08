@@ -1,36 +1,517 @@
-<link rel='preconnect' href='https://fonts.googleapis.com' />
-<link rel='preconnect' href='https://fonts.gstatic.com' crossorigin />
-<link
-  href='https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;600;700;800;900&display=swap'
-  rel='stylesheet'
-/>
-<style>
-  @import
-  url('https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;600;700;800;900&display=swap');
-  * {font-family: 'Rubik', sans-serif;} body { color: white; padding: 20px;
-  border-radius: 20px; font-family: 'Rubik'; height: max-content, sans-serif; }
-  .red { font-weight: bold; } .background { background-color: rgb(66, 74, 100);
-  } a { color:rgb(169, 185, 240) } .logo { width: 247px; height: 96px; margin: 0
-  auto; }
-</style>
+{{#if accept}}
 
-<body class='background'>
-  {{! <img src='../assets/logo_for_mail.png' class='logo' alt='' /> }}
-  {{#if accept}}
-    <div><p class='red'>Ваша публикация прошла модерацию</p>
-      <p>
-        Ваша публикация теперь доступна.
-        <a
-          href='http://wiki.credos.ru/categories/{{categoryId}}/note/{{noteId}}'
-        >Перейти</a>
-      </p>
-    </div>
-  {{else}}
-    <div>
-      <p class='red'>Ваша публикация не прошла модерацию</p>
-      <p>
-        Ваша публикация была отклонена
-      </p>
-    </div>
-  {{/if}}
+  <html>
+    <head>
+      <meta http-equiv='Content-Type' content='text/html; charset=utf-8' />
+      <meta name='x-apple-disable-message-reformatting' />
+      <meta name='viewport' content='width=device-width, initial-scale=1' />
+      <title>Новое письмо</title>
+      <style type='text/css'>
+        html { -webkit-text-size-adjust: none; -ms-text-size-adjust: none; }
+        td[style*="padding"], td[class*="em-mob-width"] { box-sizing:
+        border-box; }
+      </style>
+      <style em='styles'>
+        @media only screen and (max-device-width:660px),only screen and
+        (max-width:660px) { .em-narrow-table { width: 100%!important; max-width:
+        660px!important; min-width: 320px!important; }
+        .em-mob-wrap.em-mob-wrap-cancel { display: table-cell!important; }
+        .em-mob-width-auto { width: auto!important; } .em-mob-padding_right-20 {
+        padding-right: 20px!important; } .em-mob-padding_left-20 { padding-left:
+        20px!important; } .em-mob-width-100perc { width: 100%!important;
+        max-width: 100%!important; } .em-mob-wrap { display: block!important; }
+        .em-mob-text-align-left { text-align: left!important; } }
+      </style>
+    </head>
+    <body style='margin: 0px; padding: 0px; background-color: #e1e1e1;'>
+      <span
+        class='preheader'
+        style='visibility: hidden; opacity: 0; color: transparent; height: 0px; width: 0px; font-size: 1px; display: none !important;'
+      >&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;</span>
+      <!--[if !mso]><!-->
+      <div
+        style='font-size:0px;color:transparent;opacity:0;'
+      >⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</div>
+      <!--<![endif]-->
+      <table
+        cellpadding='0'
+        cellspacing='0'
+        border='0'
+        width='100%'
+        style='font-size: 1px; line-height: normal; background-repeat: no-repeat; background-position: 0px 0px;'
+        background='https://emcdn.ru/442012/240507_6292_aMPuErA.jpg'
+      >
+        <tr em='group'>
+          <td
+            align='center'
+            bgcolor='#E5E5E5'
+            style='background-color: #e5e5e5; background-repeat: repeat;'
+          >
+            <!--[if (gte mso 9)|(IE)]>
+				<table cellpadding="0" cellspacing="0" border="0" width="660"><tr><td>
+				<![endif]-->
+            <table
+              cellpadding='0'
+              cellspacing='0'
+              width='100%'
+              border='0'
+              style='max-width: 660px; min-width: 660px; width: 660px;'
+              class='em-narrow-table'
+            ><tr em='block' class='em-structure'>
+                <td
+                  align='center'
+                  style='padding: 20px 40px;'
+                  bgcolor='#FFFFFF'
+                  class='em-mob-padding_left-20 em-mob-padding_right-20'
+                >
+                  <table
+                    border='0'
+                    cellspacing='0'
+                    cellpadding='0'
+                    class='em-mob-width-100perc'
+                  >
+                    <tr>
+                      <td
+                        width='280'
+                        class='em-mob-wrap em-mob-wrap-cancel em-mob-width-auto'
+                      >
+                        <table
+                          cellpadding='0'
+                          cellspacing='0'
+                          border='0'
+                          width='100%'
+                          em='atom'
+                        ><tr><td>
+                              <img
+                                src='https://emcdn.ru/442012/240507_6292_4WghLKc.png'
+                                border='0'
+                                alt=''
+                                style='display: block; width: 100%; max-width: 45px;'
+                                width='45'
+                                height='45'
+                              />
+                            </td></tr></table>
+                      </td>
+                      <td
+                        width='20'
+                        class='em-mob-wrap em-mob-wrap-cancel'
+                      >&nbsp;</td>
+                      <td
+                        width='280'
+                        class='em-mob-wrap em-mob-wrap-cancel em-mob-width-auto'
+                      >
+                        <table
+                          cellpadding='0'
+                          cellspacing='0'
+                          border='0'
+                          width='100%'
+                          em='atom'
+                        ><tr><td align='right'>
+                              <!--[if (gte mso 9)|(IE)]>
+						<table cellpadding="0" cellspacing="0" border="0"><tr><td>
+						<![endif]-->
+                              <table cellpadding='0' cellspacing='0' border='0'>
+                                <tr>
+                                  <td
+                                    align='center'
+                                    valign='middle'
+                                    height='40'
+                                    style='background-color: #2c2c2c; border-radius: 7px; height: 40px; padding: 0px 40px;'
+                                    bgcolor='#2C2C2C'
+                                  >
+                                    <a
+                                      href='https://wiki.credos.ru'
+                                      target='_blank'
+                                      style="display: block; width: 100%; height: 40px; font-family: -apple-system, 'Segoe UI', 'Helvetica Neue', Helvetica, Roboto, Arial, sans-serif; color: #FFFFFF; font-size: 16px; line-height: 40px; text-decoration: none; white-space: nowrap;"
+                                    >Начать</a>
+                                  </td>
+                                </tr></table>
+                              <!--[if (gte mso 9)|(IE)]>
+						</td></tr></table>
+						<![endif]-->
+                            </td></tr></table>
+                      </td>
+                    </tr></table>
+                </td>
+              </tr></table>
+            <!--[if (gte mso 9)|(IE)]>
+				</td></tr></table>
+				<![endif]-->
+          </td>
+        </tr><tr em='group'>
+          <td
+            align='center'
+            style='background-repeat: repeat; background-color: #e5e5e5;'
+            bgcolor='#E5E5E5'
+          >
+            <!--[if (gte mso 9)|(IE)]>
+				<table cellpadding="0" cellspacing="0" border="0" width="660"><tr><td>
+				<![endif]-->
+            <table
+              cellpadding='0'
+              cellspacing='0'
+              width='100%'
+              border='0'
+              style='max-width: 660px; min-width: 660px; width: 660px;'
+              class='em-narrow-table'
+            ><tr em='block' class='em-structure'>
+                <td
+                  align='center'
+                  style='padding: 30px 40px 30px 42px;'
+                  bgcolor='#FFFFFF'
+                  class='em-mob-padding_left-20 em-mob-padding_right-20'
+                >
+                  <table
+                    border='0'
+                    cellspacing='0'
+                    cellpadding='0'
+                    class='em-mob-width-100perc'
+                  >
+                    <tr>
+                      <td
+                        width='578'
+                        valign='top'
+                        class='em-mob-wrap em-mob-width-100perc'
+                      >
+                        <table
+                          width='100%'
+                          border='0'
+                          cellspacing='0'
+                          cellpadding='0'
+                        >
+                          <tr>
+                            <td
+                              align='center'
+                              style='border-top: 1px solid #EEEEEE; border-bottom: 1px solid #EEEEEE;'
+                            >
+                              <table
+                                width='100%'
+                                border='0'
+                                cellspacing='0'
+                                cellpadding='0'
+                              >
+                                <tr>
+                                  <td align='center'>
+                                    <table
+                                      cellpadding='0'
+                                      cellspacing='0'
+                                      border='0'
+                                      width='100%'
+                                      em='atom'
+                                    ><tr><td
+                                          align='center'
+                                          style='padding-top: 20px; padding-bottom: 25px;'
+                                        >
+                                          <div
+                                            style="font-family: -apple-system, 'Segoe UI', 'Helvetica Neue', Helvetica, Roboto, Arial, sans-serif; font-size: 16px; line-height: 21px; color: #333333;"
+                                            align='left'
+                                          >
+                                            Мы рады сообщить вам, что ваша
+                                            статья была успешно проверена нашей
+                                            модерацией и опубликована на нашем
+                                            ресурсе. Ваш вклад в наше сообщество
+                                            оценен, и мы благодарим вас за
+                                            предоставленный контент.<br /><br
+                                            />Если у вас есть еще идеи или
+                                            материалы для публикации, не
+                                            стесняйтесь делиться ими с нами. Мы
+                                            всегда открыты к новым авторским
+                                            голосам и точкам зрения.<br /><br
+                                            />Спасибо еще раз за ваш вклад в
+                                            наше сообщество. Ждем новых
+                                            материалов от вас!<br /></div>
+                                        </td></tr></table>
+                                  </td>
+                                </tr></table>
+                            </td>
+                          </tr></table>
+                        <table
+                          cellpadding='0'
+                          cellspacing='0'
+                          border='0'
+                          width='100%'
+                          em='atom'
+                        ><tr><td align='center' style='padding-top: 10px;'>
+                              <div
+                                style="font-family: -apple-system, 'Segoe UI', 'Helvetica Neue', Helvetica, Roboto, Arial, sans-serif; font-size: 16px; line-height: 24px; color: #333333;"
+                              ><strong>С уважением</strong></div>
+                            </td></tr></table>
+                        <table
+                          cellpadding='0'
+                          cellspacing='0'
+                          border='0'
+                          width='100%'
+                          em='atom'
+                        ><tr><td align='center'>
+                              <div
+                                style="font-family: -apple-system, 'Segoe UI', 'Helvetica Neue', Helvetica, Roboto, Arial, sans-serif; font-size: 12px; line-height: 18px; color: #A3ADBB;"
+                              >
+                                команда модерации Базы знаний</div>
+                            </td></tr></table>
+                      </td>
+                    </tr></table>
+                </td>
+              </tr></table>
+            <!--[if (gte mso 9)|(IE)]>
+				</td></tr></table>
+				<![endif]-->
+          </td>
+        </tr><tr em='group'>
+          <td
+            align='center'
+            bgcolor='#E5E5E5'
+            style='background-color: #e5e5e5; background-repeat: repeat;'
+          >
+            <!--[if (gte mso 9)|(IE)]>
+				<table cellpadding="0" cellspacing="0" border="0" width="660"><tr><td>
+				<![endif]-->
+            <table
+              cellpadding='0'
+              cellspacing='0'
+              width='100%'
+              border='0'
+              style='max-width: 660px; min-width: 660px; width: 660px;'
+              class='em-narrow-table'
+            ><tr em='block' class='em-structure'>
+                <td
+                  align='center'
+                  style='padding: 30px 40px; background-color: #000613; background-repeat: repeat;'
+                  class='em-mob-padding_left-20 em-mob-padding_right-20'
+                  bgcolor='#000613'
+                >
+                  <table
+                    border='0'
+                    cellspacing='0'
+                    cellpadding='0'
+                    class='em-mob-width-100perc'
+                  >
+                    <tr>
+                      <td
+                        width='280'
+                        valign='top'
+                        class='em-mob-wrap em-mob-width-100perc'
+                      >
+                        <table
+                          cellpadding='0'
+                          cellspacing='0'
+                          border='0'
+                          width='45%'
+                          em='atom'
+                        ><tr><td
+                              style='padding-bottom: 0px; height: 45px;'
+                              valign='middle'
+                              height='45'
+                            >
+                              <img
+                                src='https://emcdn.ru/442012/240507_6292_b8bkNt0.png'
+                                width='45'
+                                border='0'
+                                alt=''
+                                style='display: inline-block; width: 100%; max-width: 45px;'
+                                height='45'
+                              />
+                            </td></tr></table>
+                      </td>
+                      <td width='20' class='em-mob-wrap'>&nbsp;</td>
+                      <td
+                        width='280'
+                        valign='middle'
+                        class='em-mob-wrap em-mob-width-100perc'
+                      >
+                        <table
+                          cellpadding='0'
+                          cellspacing='0'
+                          border='0'
+                          width='100%'
+                          em='atom'
+                        ><tr><td
+                              align='right'
+                              class='em-mob-text-align-left'
+                              style='padding-bottom: 0px;'
+                            >
+                              <a
+                                style="font-family: -apple-system, 'Segoe UI', 'Helvetica Neue', Helvetica, Roboto, Arial, sans-serif; font-size: 14px; line-height: 21px; text-decoration: underline;"
+                                target='_blank'
+                              >&nbsp;</a>
+                              <span
+                                style="font-family: -apple-system, 'Segoe UI', 'Helvetica Neue', Helvetica, Roboto, Arial, sans-serif; font-size: 14px; line-height: 21px; color: #A3ADBB;"
+                              >©&nbsp;2023 База знаний</span>
+                            </td></tr></table>
+                      </td>
+                    </tr></table>
+                </td>
+              </tr></table>
+            <!--[if (gte mso 9)|(IE)]>
+				</td></tr></table>
+				<![endif]-->
+          </td>
+        </tr>
+      </table>
+    </body>
+  </html>
+{{else}}
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<meta name="x-apple-disable-message-reformatting">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Новое письмо</title>
+	<style type="text/css">
+		html {
+			-webkit-text-size-adjust: none;
+			-ms-text-size-adjust: none;
+		}
+
+		td[style*="padding"],
+		td[class*="em-mob-width"] {
+        box-sizing: border-box;
+    }
+	</style>
+	<style em="styles">
+@media only screen and (max-device-width:660px),only screen and (max-width:660px) {
+    .em-narrow-table {
+        width: 100%!important;
+        max-width: 660px!important;
+        min-width: 320px!important;
+    }
+    .em-mob-wrap.em-mob-wrap-cancel {
+        display: table-cell!important;
+    }
+    .em-mob-width-auto {
+        width: auto!important;
+    }
+    .em-mob-padding_right-20 {
+        padding-right: 20px!important;
+    }
+    .em-mob-padding_left-20 {
+        padding-left: 20px!important;
+    }
+    .em-mob-width-100perc {
+        width: 100%!important;
+        max-width: 100%!important;
+    }
+    .em-mob-wrap {
+        display: block!important;
+    }
+    .em-mob-text-align-left {
+        text-align: left!important;
+    }
+}
+</style>
+</head>
+<body style="margin: 0px; padding: 0px; background-color: #e1e1e1;">
+	<span class="preheader" style="visibility: hidden; opacity: 0; color: transparent; height: 0px; width: 0px; font-size: 1px; display: none !important;">&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;</span>
+	<!--[if !mso]><!-->
+	<div style="font-size:0px;color:transparent;opacity:0;">⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</div>
+	<!--<![endif]-->
+	<table cellpadding="0" cellspacing="0" border="0" width="100%" style="font-size: 1px; line-height: normal; background-repeat: no-repeat; background-position: 0px 0px;" background="https://emcdn.ru/442012/240507_6292_aMPuErA.jpg">
+		<tr em="group">
+			<td align="center" bgcolor="#E5E5E5" style="background-color: #e5e5e5; background-repeat: repeat;">
+				<!--[if (gte mso 9)|(IE)]>
+				<table cellpadding="0" cellspacing="0" border="0" width="660"><tr><td>
+				<![endif]-->
+				<table cellpadding="0" cellspacing="0" width="100%" border="0" style="max-width: 660px; min-width: 660px; width: 660px;" class="em-narrow-table"><tr em="block" class="em-structure">
+  <td align="center" style="padding: 20px 40px;" bgcolor="#FFFFFF" class="em-mob-padding_left-20 em-mob-padding_right-20">
+    <table border="0" cellspacing="0" cellpadding="0" class="em-mob-width-100perc">
+      <tr>
+				<td width="280" class="em-mob-wrap em-mob-wrap-cancel em-mob-width-auto">
+					<table cellpadding="0" cellspacing="0" border="0" width="100%" em="atom"><tr><td>
+						<img src="https://emcdn.ru/442012/240507_6292_4WghLKc.png" border="0" alt="" style="display: block; width: 100%; max-width: 45px;" width="45" height="45">
+					</td></tr></table>
+				</td>
+				<td width="20" class="em-mob-wrap em-mob-wrap-cancel">&nbsp;</td>
+				<td width="280" class="em-mob-wrap em-mob-wrap-cancel em-mob-width-auto">
+					<table cellpadding="0" cellspacing="0" border="0" width="100%" em="atom"><tr><td align="right">
+						<!--[if (gte mso 9)|(IE)]>
+						<table cellpadding="0" cellspacing="0" border="0"><tr><td>
+						<![endif]-->
+						<table cellpadding="0" cellspacing="0" border="0">
+							<tr>
+								<td align="center" valign="middle" height="40" style="background-color: #2c2c2c; border-radius: 7px; height: 40px; padding: 0px 40px;" bgcolor="#2C2C2C">
+									<a href="https://wiki.credos.ru" target="_blank" style="display: block; width: 100%; height: 40px; font-family: -apple-system, 'Segoe UI', 'Helvetica Neue', Helvetica, Roboto, Arial, sans-serif; color: #FFFFFF; font-size: 16px; line-height: 40px; text-decoration: none; white-space: nowrap;">Начать</a>
+								</td>
+							</tr></table>
+						<!--[if (gte mso 9)|(IE)]>
+						</td></tr></table>
+						<![endif]-->
+					</td></tr></table>
+				</td>
+      </tr></table>
+  </td>
+</tr></table>
+				<!--[if (gte mso 9)|(IE)]>
+				</td></tr></table>
+				<![endif]-->
+			</td>
+		</tr><tr em="group">
+			<td align="center" style="background-repeat: repeat; background-color: #e5e5e5;" bgcolor="#E5E5E5">
+				<!--[if (gte mso 9)|(IE)]>
+				<table cellpadding="0" cellspacing="0" border="0" width="660"><tr><td>
+				<![endif]-->
+				<table cellpadding="0" cellspacing="0" width="100%" border="0" style="max-width: 660px; min-width: 660px; width: 660px;" class="em-narrow-table"><tr em="block" class="em-structure">
+  <td align="center" style="padding: 30px 40px 30px 42px;" bgcolor="#FFFFFF" class="em-mob-padding_left-20 em-mob-padding_right-20">
+    <table border="0" cellspacing="0" cellpadding="0" class="em-mob-width-100perc">
+      <tr>
+        <td width="578" valign="top" class="em-mob-wrap em-mob-width-100perc">
+					<table width="100%" border="0" cellspacing="0" cellpadding="0">
+						<tr>
+							<td align="center" style="border-top: 1px solid #EEEEEE; border-bottom: 1px solid #EEEEEE;">
+								<table width="100%" border="0" cellspacing="0" cellpadding="0">
+									<tr>
+										<td align="center">
+											<table cellpadding="0" cellspacing="0" border="0" width="100%" em="atom"><tr><td align="center" style="padding-top: 20px; padding-bottom: 25px;">
+												<div style="font-family: -apple-system, 'Segoe UI', 'Helvetica Neue', Helvetica, Roboto, Arial, sans-serif; font-size: 16px; line-height: 21px; color: #333333;" align="left"> Здравствуйте,<br><br>Спасибо за предоставленную вами статью для рассмотрения.<br><br> К сожалению, после тщательной проверки нашей модерацией, мы приняли решение отклонить ваш материал для публикации.<br><br>Если у вас есть вопросы или вы не согласны с нашим решением, то обратитесь в <a href="mailto:daniel@credos.ru?subject=%D0%9E%D1%82%D0%BA%D0%BB%D0%BE%D0%BD%D0%B5%D0%BD%D0%B8%D0%B5%20%D1%81%D1%82%D0%B0%D1%82%D1%8C%D0%B8%20%D0%BF%D1%80%D0%B8%20%D0%BF%D1%80%D0%BE%D0%B2%D0%B5%D1%80%D0%BA%D0%B5&body=%D0%94%D0%BE%D0%B1%D1%80%D1%8B%D0%B9%20%D0%B4%D0%B5%D0%BD%D1%8C%21%20%D0%9F%D1%80%D0%B8%20%D0%BF%D1%80%D0%BE%D0%B2%D0%B5%D1%80%D0%BA%D0%B5%20%D0%BC%D0%BE%D0%B5%D0%B9%20%D1%81%D1%82%D0%B0%D1%82%D1%8C%D0%B8%20%D0%BC%D0%BE%D0%B4%D0%B5%D1%80%D0%B0%D1%82%D0%BE%D1%80%D0%B0%D0%BC%D0%B8%20%D0%BE%D0%BD%D0%B0%20%D0%B1%D1%8B%D0%BB%D0%B0%20%D0%BE%D1%82%D0%BA%D0%BB%D0%BE%D0%BD%D0%B5%D0%BD%D0%B0.%20%D0%A5%D0%BE%D1%82%D0%B5%D0%BB%D0%BE%D1%81%D1%8C%20%D0%B1%D1%8B%20%D1%83%D0%B7%D0%BD%D0%B0%D1%82%D1%8C%20%D0%BF%D1%80%D0%B8%D1%87%D0%B8%D0%BD%D1%83." target="_blank" style="color: #1C52DC; text-decoration:  underline;">поддержку</a>. Мы готовы обсудить вашу статью и прослушать ваши аргументы.<br><br>Благодарим вас за ваше понимание и интерес к нашему ресурсу.<br><br></div>
+											</td></tr></table>
+										</td>
+									</tr></table>
+							</td>
+						</tr></table>
+					<table cellpadding="0" cellspacing="0" border="0" width="100%" em="atom"><tr><td align="center" style="padding-top: 10px;">
+						<div style="font-family: -apple-system, 'Segoe UI', 'Helvetica Neue', Helvetica, Roboto, Arial, sans-serif; font-size: 16px; line-height: 24px; color: #333333;"><strong>С уважением</strong></div>
+					</td></tr></table>
+					<table cellpadding="0" cellspacing="0" border="0" width="100%" em="atom"><tr><td align="center">
+						<div style="font-family: -apple-system, 'Segoe UI', 'Helvetica Neue', Helvetica, Roboto, Arial, sans-serif; font-size: 12px; line-height: 18px; color: #A3ADBB;">
+						команда модерации Базы знаний</div>
+					</td></tr></table>
+				</td>
+      </tr></table>
+  </td>
+</tr></table>
+				<!--[if (gte mso 9)|(IE)]>
+				</td></tr></table>
+				<![endif]-->
+			</td>
+		</tr><tr em="group">
+			<td align="center" bgcolor="#E5E5E5" style="background-color: #e5e5e5; background-repeat: repeat;">
+				<!--[if (gte mso 9)|(IE)]>
+				<table cellpadding="0" cellspacing="0" border="0" width="660"><tr><td>
+				<![endif]-->
+				<table cellpadding="0" cellspacing="0" width="100%" border="0" style="max-width: 660px; min-width: 660px; width: 660px;" class="em-narrow-table"><tr em="block" class="em-structure">
+  <td align="center" style="padding: 30px 40px; background-color: #000613; background-repeat: repeat;" class="em-mob-padding_left-20 em-mob-padding_right-20" bgcolor="#000613">
+		<table border="0" cellspacing="0" cellpadding="0" class="em-mob-width-100perc">
+      <tr>
+        <td width="280" valign="top" class="em-mob-wrap em-mob-width-100perc">
+					<table cellpadding="0" cellspacing="0" border="0" width="45%" em="atom"><tr><td style="padding-bottom: 0px; height: 45px;" valign="middle" height="45">
+						<img src="https://emcdn.ru/442012/240507_6292_b8bkNt0.png" width="45" border="0" alt="" style="display: inline-block; width: 100%; max-width: 45px;" height="45">
+					</td></tr></table>
+				</td>
+				<td width="20" class="em-mob-wrap">&nbsp;</td>
+				<td width="280" valign="middle" class="em-mob-wrap em-mob-width-100perc">
+					<table cellpadding="0" cellspacing="0" border="0" width="100%" em="atom"><tr><td align="right" class="em-mob-text-align-left" style="padding-bottom: 0px;">
+					<a style="font-family: -apple-system, 'Segoe UI', 'Helvetica Neue', Helvetica, Roboto, Arial, sans-serif; font-size: 14px; line-height: 21px; text-decoration: underline;" target="_blank">&nbsp;</a>
+					<span style="font-family: -apple-system, 'Segoe UI', 'Helvetica Neue', Helvetica, Roboto, Arial, sans-serif; font-size: 14px; line-height: 21px; color: #A3ADBB;">©&nbsp;2023 База знаний</span>
+				</td></tr></table>
+				</td>
+			</tr></table>
+  </td>
+</tr></table>
+				<!--[if (gte mso 9)|(IE)]>
+				</td></tr></table>
+				<![endif]-->
+			</td>
+		</tr>
+	</table>
 </body>
+</html>
+{{/if}}

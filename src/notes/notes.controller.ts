@@ -47,9 +47,27 @@ export class NotesController {
   }
 
   @UseGuards(JwtAuthGuard)
+  @Get('useful/:id')
+  usefulNote(@Param('id') id: string, @Req() req: RequestWithUser) {
+    return this.notesService.usefulNote(req.user['sub'], id);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get('dis-useful/:id')
+  disUsefulNote(@Param('id') id: string, @Req() req: RequestWithUser) {
+    return this.notesService.disUsefulNote(req.user['sub'], id);
+  }
+
+  @UseGuards(JwtAuthGuard)
   @Patch('/toggle-actual-note/:id')
   toggleActualNote(@Param('id') id: string, @Req() req: RequestWithUser) {
     return this.notesService.actualNote(id, req.user['sub']);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get('note-pinned-toggle/:id')
+  togglePinnedNote(@Param('id') id: string, @Req() req: RequestWithUser) {
+    return this.notesService.pinnedToggle(req.user['sub'], id);
   }
 
   @UseGuards(JwtAuthGuard)
