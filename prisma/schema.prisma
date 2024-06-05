@@ -46,7 +46,7 @@ model User {
 model TelegramAccount {
   id             String  @id @default(uuid())
   username       String
-  telegramUserId String  @map("telegram_user_id")
+  telegramUserId String? @map("telegram_user_id")
   avatarUrl      String?
   user           User?   @relation(fields: [userId], references: [id])
   userId         String? @unique @map("user_id")
