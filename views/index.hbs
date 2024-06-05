@@ -1,0 +1,39 @@
+<html lang='en'>
+  <head>
+    <meta charset='UTF-8' />
+    <meta name='viewport' content='width=device-width, initial-scale=1.0' />
+    <link rel='preconnect' href='https://fonts.googleapis.com' />
+    <link rel='preconnect' href='https://fonts.gstatic.com' crossorigin />
+    <link
+      href='https://fonts.googleapis.com/css2?family=Onest:wght@100..900&display=swap'
+      rel='stylesheet'
+    />
+    <title>Wiki Server</title>
+  </head>
+  <style>
+    body { margin: 0; padding: 0; background: rgb(0,0,0); background:
+    linear-gradient(153deg, rgba(0,0,0,1) 0%, rgba(6,57,217,1) 100%); color:
+    white; font-family: "Onest", sans-serif;} .wrapper { width: 100%; height:
+    100%; display: flex; flex-direction: column; gap: 20px; justify-content:
+    center; align-items: center;} .greeting { display: flex;flex-direction:
+    column; gap: 10px; } .title {font-size: 25px; font-weight: bold;} .version
+    {opacity: 60%; text-align: right;} .nav-bar { padding: 10px
+    20px;border-radius: 10px; background-color: rgba(240, 248, 255, 0.146);
+    display: flex; gap: 20px; align-items: center;} .nav-bar a {
+    color:aliceblue; text-decoration: none; transition: all 1s;} .nav-bar
+    a:hover { text-decoration: underline; color: rgb(217, 236, 252);}
+  </style>
+  <body>
+    <div class='wrapper'>
+      <div class='greeting'>
+        <span class='title'>{{title}}</span>
+        <span class='version'>{{actualVersion}}</span>
+      </div>
+      <nav class='nav-bar'>
+        <a href='#'>Knowledge Base</a><a href='#'>Support</a><a
+          href='#'
+        >About</a>
+      </nav>
+    </div>
+  </body>
+</html>

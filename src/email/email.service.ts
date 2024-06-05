@@ -1,5 +1,5 @@
 import { MailerService } from '@nestjs-modules/mailer';
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
@@ -20,11 +20,14 @@ export class EmailService {
         },
       });
       category.moderators.forEach(async (modrator) => {
-        await this.mailerService.sendMail({
-          to: modrator.email,
-          subject: 'Уведомление от WIKI',
-          template: './confirmation',
-        });
+        if (modrator.emailNotification) {
+          return this.mailerService.sendMail({
+            to: modrator.email,
+            subject: 'Уведомление от WIKI',
+            template: './confirmation',
+          });
+        }
+        return null;
       });
     } catch (error) {
       console.log(error);
@@ -52,17 +55,30 @@ export class EmailService {
     noteId: string,
     type: boolean = true,
   ) {
+    const user = await this.prismaService.user.findFirst({
+      where: {
+        email,
+      },
+    });
     try {
-      await this.mailerService.sendMail({
-        to: email,
-        subject: 'Уведомление от WIKI',
-        template: './confirm',
-        context: {
-          categoryId,
-          noteId,
-          accept: type,
-        },
-      });
+      if (!user)
+        throw new HttpException(
+          'Не удалось отправить уведомление',
+          HttpStatus.NOT_FOUND,
+        );
+      if (user.emailNotification) {
+        await this.mailerService.sendMail({
+          to: email,
+          subject: 'Уведомление от WIKI',
+          template: './confirm',
+          context: {
+            categoryId,
+            noteId,
+            accept: type,
+          },
+        });
+      }
+      return null;
     } catch (error) {
       console.log(error);
     }

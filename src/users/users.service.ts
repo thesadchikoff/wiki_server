@@ -2,6 +2,8 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import * as argon2 from 'argon2';
 import { EmailService } from 'src/email/email.service';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { TelegramDto } from 'src/telegram/dto/telegram.dto';
+import { TelegramService } from 'src/telegram/telegram.service';
 import { CreateUserDto, UpdateToken } from './dto/create-user.dto';
 
 @Injectable()
@@ -9,6 +11,7 @@ export class UsersService {
   constructor(
     private prisma: PrismaService,
     private emailService: EmailService,
+    private telegramService: TelegramService,
   ) {}
   create(data: CreateUserDto) {
     const user = this.prisma.user.create({
@@ -169,12 +172,105 @@ export class UsersService {
     return removeRefreshToken;
   }
 
+  async connectTelegramNotify(userId: string, dto: TelegramDto) {
+    const user = await this.prisma.user.findFirst({
+      where: {
+        id: userId,
+      },
+    });
+    console.log(user);
+
+    await this.prisma.user.update({
+      where: {
+        id: user.id,
+      },
+      data: {
+        telegramNotification: true,
+      },
+    });
+    await this.telegramService.activateTelegramNotification(
+      user,
+      dto.telegramId,
+    );
+    return {
+      success: true,
+      message: {
+        title: 'Успешно',
+        description: 'Вы успешно подключили уведомления через Telegram',
+      },
+    };
+  }
+
+  async disconnectTelegramNotify(userId: string) {
+    await this.prisma.telegramAccount.delete({
+      where: {
+        userId,
+      },
+    });
+    return {
+      success: true,
+      message: {
+        title: 'Успешно',
+        description: 'Вы успешно отвязали ваш телеграм аккаунт',
+      },
+    };
+  }
+
+  async toggleTelegramNotify(userId: string) {
+    const user = await this.prisma.user.findFirst({
+      where: {
+        id: userId,
+      },
+    });
+    await this.prisma.user.update({
+      where: {
+        id: user.id,
+      },
+      data: {
+        telegramNotification: !user.telegramNotification,
+      },
+    });
+    return {
+      success: true,
+      message: {
+        title: 'Успешно',
+        description: `Уведомление в Telegram ${user.telegramNotification ? 'отключены' : 'подключены'}`,
+      },
+    };
+  }
+
+  async toggleEmailNotification(userId: string) {
+    const user = await this.prisma.user.findFirst({
+      where: {
+        id: userId,
+      },
+    });
+    if (!user)
+      throw new HttpException('Сервер ответил с ошибкой', HttpStatus.NOT_FOUND);
+    await this.prisma.user.update({
+      where: {
+        id: user.id,
+      },
+      data: {
+        emailNotification: !user.emailNotification,
+      },
+    });
+    return {
+      success: true,
+      message: {
+        title: 'Успешно',
+        description: `Уведомление на почту ${user.emailNotification ? 'отключены' : 'подключены'}`,
+      },
+    };
+  }
+
   async findByEmailOrId(idOrEmail: string) {
     return this.prisma.user.findFirst({
       where: {
         OR: [{ id: idOrEmail }, { email: idOrEmail }],
       },
       include: {
+        TelegramAccount: true,
         moderatedContent: {
           include: {
             _count: {

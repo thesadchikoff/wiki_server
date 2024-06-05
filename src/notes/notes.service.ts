@@ -1,6 +1,7 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { EmailService } from 'src/email/email.service';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { TelegramService } from 'src/telegram/telegram.service';
 import responseMessage from 'src/utils/response-message.helper';
 import { CreateNoteDto, SearchDto } from './dto/create-note.dto';
 import { NoteModeratorAction, UpdateNoteDto } from './dto/update-note.dto';
@@ -10,9 +11,13 @@ export class NotesService {
   constructor(
     private prismaService: PrismaService,
     private emailService: EmailService,
+    private telegramService: TelegramService,
   ) {}
   async create(createNoteDto: CreateNoteDto, userId: string) {
     await this.emailService.sendUserConfirmation(createNoteDto.categoriesId);
+    await this.telegramService.sendMessageForModeration(
+      createNoteDto.categoriesId,
+    );
     return this.prismaService.notes.create({
       data: {
         ...createNoteDto,
@@ -182,7 +187,11 @@ export class NotesService {
         id: param.noteId,
       },
       include: {
-        author: true,
+        author: {
+          include: {
+            TelegramAccount: true,
+          },
+        },
         categories: {
           include: {
             moderators: true,
@@ -190,6 +199,7 @@ export class NotesService {
         },
       },
     });
+
     if (
       note.categories.moderators.find((moderator) => moderator.id === user.id)
     ) {
@@ -211,22 +221,70 @@ export class NotesService {
                 oldContent: null,
               },
             });
-            await this.emailService.sendEmailForAcceptPublishUser(
-              note.author.email,
-              note.categoriesId,
-              note.id,
-            );
+            if (note.author) {
+              await this.telegramService.sendMessageForNotification(
+                note.author.id,
+                `Привет!
+                
+  Мы рады сообщить тебе, что отредактированная версия твоей
+  статьи была успешно проверена нашей
+  модерацией и опубликована на нашем
+  ресурсе. Твой вклад в наше сообщество
+  оценен, и мы благодарим тебя за
+  предоставленный контент.
+                
+  Если у тебя есть еще идеи или
+  материалы для публикации, не
+  стесняйся делиться ими с нами. Мы
+  всегда открыты к новым авторским
+  статьям.
+  
+  
+  Спасибо еще раз за твой вклад в
+  наше сообщество. Ждем новых
+  материалов от тебя!`,
+              );
+              await this.emailService.sendEmailForAcceptPublishUser(
+                note.author.email,
+                note.categoriesId,
+                note.id,
+              );
+            }
             return responseMessage(
               true,
               'Одобрено',
               'Публикация успешно отредактирована',
             );
           }
-          await this.emailService.sendEmailForAcceptPublishUser(
-            note.author.email,
-            note.categoriesId,
-            note.id,
-          );
+          if (note.author) {
+            await this.telegramService.sendMessageForNotification(
+              note.author.id,
+              `Привет!
+            
+Мы рады сообщить тебе, что твоя
+статья была успешно проверена нашей
+модерацией и опубликована на нашем
+ресурсе. Твой вклад в наше сообщество
+оценен, и мы благодарим тебя за
+предоставленный контент.
+            
+Если у тебя есть еще идеи или
+материалы для публикации, не
+стесняйся делиться ими с нами. Мы
+всегда открыты к новым авторским
+статьям.
+
+
+Спасибо еще раз за твой вклад в
+наше сообщество. Ждем новых
+материалов от тебя!`,
+            );
+            await this.emailService.sendEmailForAcceptPublishUser(
+              note.author.email,
+              note.categoriesId,
+              note.id,
+            );
+          }
           await this.prismaService.notes.update({
             where: {
               id: note.id,
@@ -247,19 +305,34 @@ export class NotesService {
               moderatorId: userId,
             },
           });
-          await this.emailService.sendEmailForAcceptPublishUser(
-            note.author.email,
-            note.categoriesId,
-            note.id,
-            false,
-          );
-          if (note.isEdited) {
+          if (note.author) {
+            await this.telegramService.sendMessageForNotification(
+              note.author.id,
+              `Привет!
+  
+  Спасибо за предоставленную тобой статью для рассмотрения.
+              
+  К сожалению, после тщательной проверки нашей модерацией, мы приняли решение отклонить твой материал для публикации.
+              
+  Если у тебя есть вопросы или ты не согласны с нашим решением, то обратись в [поддержку](mailto:daniel@credos.ru). Мы готовы обсудить твою статью и выслушать твои аргументы.`,
+            );
             await this.emailService.sendEmailForAcceptPublishUser(
               note.author.email,
               note.categoriesId,
               note.id,
               false,
             );
+          }
+          if (note.isEdited) {
+            if (note.author) {
+              await this.emailService.sendEmailForAcceptPublishUser(
+                note.author.email,
+                note.categoriesId,
+                note.id,
+                false,
+              );
+            }
+
             await this.prismaService.notes.update({
               where: {
                 id: note.id,
@@ -270,6 +343,7 @@ export class NotesService {
                 content: note.oldContent,
               },
             });
+
             return responseMessage(
               true,
               'Отклонено',
@@ -489,6 +563,7 @@ export class NotesService {
           ...updateNoteDto,
         },
       });
+      await this.telegramService.sendMessageForModeration(note.categoriesId);
       await this.emailService.sendUserConfirmation(note.categoriesId);
       return {
         success: true,

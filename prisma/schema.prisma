@@ -23,20 +23,35 @@ model RefreshToken {
 }
 
 model User {
-  id               String           @id @default(uuid())
-  email            String           @unique
-  password         String
-  refresh_token    RefreshToken?
-  notes            Notes[]
-  categories       Categories[]
-  isAdmin          Boolean          @default(false) @map("is_admin")
-  moderatedContent Categories[]     @relation(name: "moderated_content")
-  ModerActionLog   ModerActionLog[]
-  usefulNotes      Notes[]          @relation(name: "usefull_content")
+  id                   String           @id @default(uuid())
+  email                String           @unique
+  password             String
+  refresh_token        RefreshToken?
+  notes                Notes[]
+  categories           Categories[]
+  isAdmin              Boolean          @default(false) @map("is_admin")
+  moderatedContent     Categories[]     @relation(name: "moderated_content")
+  ModerActionLog       ModerActionLog[]
+  usefulNotes          Notes[]          @relation(name: "usefull_content")
+  emailNotification    Boolean          @default(true)
+  telegramNotification Boolean          @default(false)
 
-  createdAt DateTime @default(now()) @map("created_at")
+  createdAt       DateTime         @default(now()) @map("created_at")
+  TelegramAccount TelegramAccount?
+  File            File[]
 
   @@map("users")
+}
+
+model TelegramAccount {
+  id             String  @id @default(uuid())
+  username       String
+  telegramUserId String  @map("telegram_user_id")
+  avatarUrl      String?
+  user           User?   @relation(fields: [userId], references: [id])
+  userId         String? @unique @map("user_id")
+
+  @@map("telegram_account")
 }
 
 model PreRegisterUser {
@@ -53,8 +68,8 @@ model Notes {
   id           String      @id @default(uuid())
   title        String
   content      String
-  author       User        @relation(fields: [userId], references: [id])
-  userId       String      @map("user_id")
+  author       User?       @relation(fields: [userId], references: [id])
+  userId       String?     @map("user_id")
   createdAt    DateTime    @default(now()) @map("created_at")
   updatedAt    DateTime    @updatedAt @map("updated_at")
   categories   Categories? @relation(fields: [categoriesId], references: [id])
@@ -77,8 +92,8 @@ model Categories {
   bannerColorLeft  String   @map("banner_color_left")
   bannerColorRight String   @map("banner_color_right")
   notes            Notes[]
-  author           User     @relation(fields: [userId], references: [id])
-  userId           String   @map("user_id")
+  author           User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  userId           String?  @map("user_id")
   moderators       User[]   @relation(name: "moderated_content")
   createdAt        DateTime @default(now())
 
@@ -88,12 +103,24 @@ model Categories {
 model ModerActionLog {
   id          String          @id @default(uuid())
   type        ModerActionType
-  moderator   User            @relation(fields: [moderatorId], references: [id], onDelete: NoAction)
-  moderatorId String          @map("moderator_id")
+  moderator   User?           @relation(fields: [moderatorId], references: [id], onDelete: SetNull)
+  moderatorId String?         @map("moderator_id")
   createdAt   DateTime        @default(now()) @map("created_at")
 }
 
 enum ModerActionType {
   ACCEPT
   UNACCEPT
+}
+
+model File {
+  id        String  @id @default(uuid())
+  fileName  String  @map("file_name")
+  fileUrl   String  @map("file_url")
+  author    User?   @relation(fields: [userId], references: [id], onDelete: SetNull)
+  size      Int
+  userId    String? @map("user_id")
+  isVisible Boolean @default(false) @map("is_visible")
+
+  createdAt DateTime @default(now()) @map("created_at")
 }

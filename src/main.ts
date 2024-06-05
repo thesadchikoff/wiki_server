@@ -1,9 +1,13 @@
 import { NestFactory } from '@nestjs/core';
+import { NestExpressApplication } from '@nestjs/platform-express';
 import * as express from 'express';
 import { join } from 'path';
 import { AppModule } from './app.module';
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create<NestExpressApplication>(AppModule);
+  app.useStaticAssets(join(__dirname, '..', 'public'));
+  app.setBaseViewsDir(join(__dirname, '..', 'views'));
+  app.setViewEngine('pug');
   const PORT = process.env.PORT ?? 3000;
   app.enableCors({
     origin: [
@@ -27,6 +31,7 @@ async function bootstrap() {
       next();
     }
   });
+
   app.use('/uploads', express.static(join(__dirname, '..', 'uploads')));
   await app.listen(PORT, () => {
     console.log(`Server started on port ${PORT}`);
